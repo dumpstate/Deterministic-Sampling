@@ -1,0 +1,58 @@
+\documentclass[a4paper]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{\textbf{
+	Wstęp do algorytmów ewolucyjnych \\
+	{\em deterministic samping}} - badanie statystycznej istotności metody reprodukcji - zarys projektu}
+\author{\textbf{Albert Sadowski, Krzysztof Wodecki}\\
+	Wydział Matematyki i Nauk Informacyjnych\\
+	Politechnika Warszawska}
+
+\begin{document}
+	\maketitle
+	\section{Wstęp}	
+	Selekcja ukierunkowuje algorytm ewolucyjny w stronę lepszych rozwiązań. Z jednej strony, w fazie reprodukcji, wybierani są rodzice dla operacji genetycznych, z drugiej, w fazie sukcesji, tworzy się nową populację bazową na podstawie osobników znajdujących się w populacji potomnej  i starej populacji bazowej. {\em Deterministic sampling} jest jedną z metod reprodukcji, którą porównamy z inną metodą reprodukcji - ruletkową reprodukcją proporcjonalną.
+
+		\subsection{Reprodukcja ruletkowa}
+	Zgodnie z [1], w reprodukcji proporcjonalnej defuniuje się zmienną losową, określając dla każdego osobnika w populacji $P^t$ prawdopodobieństwo jego reprodukcji według wzoru:
+
+	\begin{equation}
+		p_r(X) = \frac{\Phi(X)}{\sum_{Y \epsilon P^t}{\Phi(Y)}}
+	\end{equation}
+
+	gdzie $\Phi(X)$ - funkcja przystosowania. Prawdopodobieństwo wylosowania osobnika jest wprost proporcjonalne do jego wartości funkcji przystosowania.
+{
+	\subsection{Deterministic sampling}
+	{\em Deterministic sampling} to także metoda reprodukcji proporcjonalnej ([2]). Wartość funkcji dopasowania każdego osobnika w populacji jest dzielona przez średnią wartość funkcji dopasowania w populacji:
+	\begin{equation}
+		v_d(X) = \lfloor \frac{\Phi(X)}{\sum_{Y \epsilon P^t}{\Phi(Y)} / \overline{P^t}} \rfloor
+	\end{equation}
+	
+	jedynie część całkowita otrzymanej wartości jest brana pod uwagę. Jeżeli wartość $v_d$ jest równa bądź większa od jedności osobnik jest wybierany do kolejnego pokolenia. Pozostałe wolne miejsca w nowej populacji są wypełniane osobnikami z najwyższą wartością $v_d$.
+
+	W przypadku reprodukcji ruletkowej liczność kolejnego pokolenia nie jest znana. Każdy z osobników wybierany jest bądź odrzucany z pewnym prawdopodobieństwem. W przypadku metody {\em dynamic sampling} liczność pochodnej populacji powinna być określona w sposób deterministyczny, tzn. liczba osobników dla których $v_d \geq 1$ jest nieznana, ale liczba "wolnego miejsca" w kolejnym pokoleniu powinna być określona.
+
+	Niech liczba miejsca w kolejnym pokoleniu będzie określona jako: $s = n_d * \alpha$, gdzie $n_d$ to liczba osobników dla których $v_d \geq 1$, $\alpha > 1$ - stała określająca liczność kolejnego pokolenia. Wartość stałej $\alpha$ zostanie ustalona w sposób empiryczny.
+
+	Inną metodą określenia ilości "wolnego miejsca" może być sposób znany z metody {\em Stochastic Remainder Sampling}([2]), gdzie osobniki dla których $v_d < 1$, wybierane są jak w metodzie ruletkowej.
+
+	\section{Ocena metod reprodukcji}
+	Dla pewnego problemu $P$ (np. problem plecakowy) zostaną zaimplementowane algorytmy genetyczne uwzględniające dwie różne metody reprodukcji - metodę reprodukcji ruletkowej oraz metodę dynamic sampling.
+
+	Wyniki uruchomień obydwu algorytmów zostaną porównane przy pomocy narzędzi statystycznych. Istotność różnic średnich wartości przystosowania zostanie zweryfikowana odpowiednimi testami statystycznymi. Zestawione zostaną także uśrednione krzywe zbieżności.
+
+	Chcemy uzyskać odpowiedź na pytanie: czy zastosowanie {\em dynamic sampling} daje statystycznie lepsze wyniki niż zastosowanie reprodukcji ruletkowej.
+
+	\section{Bibliografia}
+	\begin{enumerate}
+		\item Arabas J., {\em Wykłady z algorytmów ewolucyjnych}, Wydawnictwa Naukowo-Techniczne, Warszawa, 2004.
+		\item Andare A.V., Errico de L., Aquino A.L.L., Assis L.P., Barbosa C.H.N.R., {\em Analysis of Selection and Crossover Methods used by Genetic Algorithm-based Heuristic to solve the LSP Allocation Problem in MPLS Networks under Capacity Constraints}, EngOpt 2008 - International Conference on Engineering Optimization, Rio de Janeiro, 2008.
+		\item Zuylen van, Anke, {\em Deterministic Samping Algorithms for Network Design}, School of Operations Research and Information Engineering, Cornell University, Ithaca, NY 14853.
+	\end{enumerate}
+	
+\end{document}
